@@ -1,0 +1,14 @@
+@use "styles/variables";
+
+.footer-component {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: variables.$footer-height;
+  //background: variables.$green-light;
+  background: linear-gradient(to bottom left, variables.$green-medium, variables.$green-dark);
+  color: rgba(variables.$white, 0.8);
+  font-size: 0.7rem;
+  box-shadow: 0 -1px 1px rgba(variables.$green-dark, 0.3);
+  padding: variables.$outer-padding;
+}
