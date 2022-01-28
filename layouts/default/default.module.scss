@@ -1,0 +1,7 @@
+@use "styles/debug";
+
+.default-layout {
+  width: 100vw;
+  height: 100vh;
+  @include debug.red-band;
+}
