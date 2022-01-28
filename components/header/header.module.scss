@@ -1,0 +1,34 @@
+@use "styles/variables";
+
+.header-component {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: variables.$header-height;
+  //background: variables.$green-dark;
+  background: linear-gradient(to bottom left, variables.$green-medium, variables.$green-dark);
+  color: rgba(variables.$white, 0.7);
+  box-shadow: 0 2px 1px rgba(variables.$green-dark, 0.4);
+  padding: variables.$outer-padding;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  h1 {
+    font-size: 1.5rem;
+    margin-right: auto;
+  }
+
+  ul {
+    display: flex;
+    align-items: center;
+    margin-right: auto;
+  }
+
+  li {
+    margin-right: 40px;
+  }
+}

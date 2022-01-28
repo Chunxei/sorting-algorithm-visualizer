@@ -1,7 +1,15 @@
 @use "styles/debug";
+@use "styles/variables";
 
 .default-layout {
   width: 100vw;
   height: 100vh;
-  @include debug.red-band;
+
+  main {
+    width: 100%;
+    height: calc(100vh - (variables.$header-height + variables.$footer-height));
+    padding: variables.$outer-padding;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
 }
