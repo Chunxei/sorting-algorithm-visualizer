@@ -6,7 +6,7 @@
   width: 100%;
   height: variables.$header-height;
   //background: variables.$green-dark;
-  background: linear-gradient(to bottom left, variables.$green-medium, variables.$green-dark);
+  background: linear-gradient(to top right, variables.$green-dark, variables.$green-medium);
   color: rgba(variables.$white, 0.7);
   box-shadow: 0 2px 1px rgba(variables.$green-dark, 0.4);
   padding: variables.$outer-padding;
@@ -18,7 +18,7 @@
   width: 100%;
 
   h1 {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     margin-right: auto;
   }
 
@@ -29,6 +29,7 @@
   }
 
   li {
+    font-size: 0.85rem;
     margin-right: 40px;
   }
 }

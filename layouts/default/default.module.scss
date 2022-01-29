@@ -1,5 +1,6 @@
 @use "styles/debug";
 @use "styles/variables";
+@use "sass:math";
 
 .default-layout {
   width: 100vw;
@@ -8,8 +9,5 @@
   main {
     width: 100%;
     height: calc(100vh - (variables.$header-height + variables.$footer-height));
-    padding: variables.$outer-padding;
-    padding-top: 20px;
-    padding-bottom: 20px;
   }
 }
