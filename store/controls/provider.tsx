@@ -1,6 +1,6 @@
 import React, {useContext, useReducer} from 'react';
-import {ControlsState, ControlsAction, ControlsDispatch} from './types'
-import {controlsReducer, controlsState} from "./reducer";
+import {ControlsState, ControlsDispatch} from './types';
+import {controlsReducer, controlsState} from './reducer';
 
 const ControlsContext = React.createContext<{
   state: ControlsState,
@@ -18,9 +18,16 @@ export const useControlsContext = () => {
   }
 
   return context;
-}
+};
 
-function ControlsProvider({ children }: ControlsProviderProps): JSX.Element {
+/**
+ * The context provider handling the algorithm controls
+ *
+ * @param {ControlsProviderProps} {children} - the nodes that make up
+ * the consumer subtree of this provider
+ * @return {JSX.Element}
+ * */
+function ControlsProvider({children}: ControlsProviderProps): JSX.Element {
   const [state, dispatch] = useReducer(controlsReducer, controlsState);
   return (
     <ControlsContext.Provider value={{state, dispatch}}>

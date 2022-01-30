@@ -1,6 +1,26 @@
 @use "styles/variables";
 @use "styles/debug";
 
+@mixin getBarHighlightStyles($index) {
+  $bar-color: variables.$green-medium;
+
+  @if ($index == 1) {
+    $bar-color: variables.$orange;
+  } @else if($index == 2) {
+    $bar-color: variables.$orange-dark;
+  } @else if($index == 3) {
+    $bar-color: variables.$red-dark;
+  }
+
+  &.highlight-#{$index} {
+    .visualizer-bar {
+      &__bar {
+        background: $bar-color;
+      }
+    }
+  }
+}
+
 .viewer-component {
   width: 100%;
   height: 100%;
@@ -19,7 +39,7 @@
   min-height: 500px;
   padding: 40px 40px 0 40px;
   //@include debug.red-band;
-  border-bottom: 1px solid variables.$green-dark;
+  border-bottom: 1px solid variables.$green-medium;
 }
 
 .visualizer-bar {
@@ -49,7 +69,7 @@
     height: calc(100% - 40px);
     width: 100%;
     background: variables.$green-medium;
-    border: 1px solid variables.$white;
+    border: 2px solid variables.$white;
     //border: 1px solid variables.$green-dark;
     border-bottom: none;
     transform-origin: 50% 100%;
@@ -58,5 +78,17 @@
 
   &:not(:first-of-type) &__bar {
     border-left: none;
+  }
+
+  &.sorted {
+    .visualizer-bar {
+      &__bar {
+        background: variables.$yellow-light !important;
+      }
+    }
+  }
+
+  @for $bar-index from 1 through 3 {
+    @include getBarHighlightStyles($bar-index);
   }
 }

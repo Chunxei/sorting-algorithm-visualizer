@@ -6,6 +6,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "lint:raw": "eslint",
     "test": "jest"
   },
   "dependencies": {
@@ -25,8 +26,12 @@
     "@types/react": "17.0.38",
     "@types/testing-library__jest-dom": "^5.14.2",
     "@types/testing-library__react": "^10.2.0",
-    "eslint": "8.7.0",
+    "@typescript-eslint/eslint-plugin": "^5.10.1",
+    "@typescript-eslint/parser": "^5.10.1",
+    "eslint": "^8.8.0",
+    "eslint-config-google": "^0.14.0",
     "eslint-config-next": "12.0.9",
+    "eslint-plugin-react": "^7.28.0",
     "jest": "^27.4.7",
     "typescript": "4.5.5"
   }
