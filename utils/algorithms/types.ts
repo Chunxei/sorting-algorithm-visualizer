@@ -7,3 +7,15 @@ export interface ArraySorterReturnValues {
   array: ArrayEntry[]
   indexes: number[]
 }
+
+export interface AlgorithmInfo {
+  description: string
+  complexity: {
+    time: string
+    space: string
+  }
+  references: Array<{
+    title: string
+    link: string
+  }>
+}

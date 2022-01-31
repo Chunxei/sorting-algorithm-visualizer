@@ -2,30 +2,20 @@ import React, {useEffect, useRef, useState} from 'react';
 import styles from './viewer.module.scss';
 import {motion} from 'framer-motion';
 import cn from 'classnames';
+import Image from 'next/image';
 import {useControlsContext} from '../../store/controls/provider';
 import {controlsActions} from '../../store/controls/actions';
 import {
   AlgorithmClass,
   algorithmClasses,
-  algorithmNames,
-  BUBBLE_SORT,
-  SELECTION_SORT,
+  algorithmDetails,
 } from '../../utils/algorithms';
-
-const values: number[] = [
-  1, 3, 45, 3, 55, 3, 35, 6, 67, 78, 112,
-  32, 21, 56, 90, 8, 5, 97, 24, 49, 54, 160,
-];
+import {getVisualizerBarClasses, getVisualizerLegends} from './utils';
 
 interface ArrayEntry {
   key: number
   value: number
 }
-
-const entries = values.map((value, index): ArrayEntry => ({
-  key: index,
-  value,
-}));
 
 /**
  * The component that renders the visualizer
@@ -35,92 +25,100 @@ function Viewer(): JSX.Element {
   const {state, dispatch} = useControlsContext();
   const {
     canPlayVisualization,
+    canPlayVisualizationStep,
     activeAlgorithmName,
     algorithmSpeed,
+    array: initArray,
+    resetVisualization,
   } = state;
 
   const [timer, setTimer] = useState<number | undefined>(undefined);
-  const [array, setArray] = useState<ArrayEntry[]>(entries);
-  const [indexes, setIndexes] = useState<number[]>([]);
-  const [max] = useState<number>(Math.max(...values));
+  const [array, setArray] = useState<ArrayEntry[]>([]);
+  const [max, setMax] = useState<number>(0);
 
   /* an instance of the sorting class will be passed to sorterRef.current */
   const sorterRef = useRef<AlgorithmClass | null>(null);
   const {current: sorter} = sorterRef;
-  // console.log('[SORTER]:', sorter);
 
-  const handleSort = (sorterData: AlgorithmClass, speed: number) => {
-    const {array: newArray, indexes} = sorterData.sortOnce();
-    // console.log('[ARRAY]:', newArray);
-    // console.log('[INDEXES]:', indexes);
+  const algorithmInfo = algorithmDetails[activeAlgorithmName];
 
+  const legends = React.useMemo(
+      () => Object.entries(getVisualizerLegends(activeAlgorithmName)),
+      [activeAlgorithmName],
+  );
+
+  const stopVisualization = () => {
+    dispatch(controlsActions.playVisualization(false));
+    window.clearTimeout(timer);
+  };
+
+  const handleSort = (
+      sorterData: AlgorithmClass,
+      speed: number,
+      stepOnce?: boolean,
+  ) => {
+    const {array: newArray} = sorterData.sortOnce();
     setArray(newArray);
-    setIndexes(indexes);
     sorterRef.current = sorterData;
 
-    // if (!sorterData.done && canPlayVisualization) {
-    if (sorterData.done) {
-      dispatch(controlsActions.playVisualization(false));
+    if ((sorterData.done && canPlayVisualization) || stepOnce) {
+      stopVisualization();
     } else {
       const timeout = window.setTimeout(handleSort, speed, sorterData, speed);
       setTimer(timeout);
     }
   };
 
-  const startSorting = () => {
+  const startVisualization = () => {
     window.clearInterval(timer);
-    const timeout = window.setTimeout(
-        handleSort, algorithmSpeed,
-        sorter, algorithmSpeed,
-    );
-    setTimer(timeout);
-  };
 
-  const getVisualizerBarClassNames = (
-      index: number,
-  ) : Record<string, boolean> => {
-    let sort: AlgorithmClass;
-
-    switch (activeAlgorithmName) {
-      case algorithmNames.BUBBLE_SORT:
-        sort = sorter as BUBBLE_SORT;
-        return {
-          [styles.sorted]: index > sort?.lastIndex,
-          [styles['highlight-1']]: index === sort?.leftIndex,
-          [styles['highlight-2']]: index === sort?.rightIndex,
-          [styles['highlight-3']]: index === sort?.lastIndex,
-        };
-
-      case algorithmNames.SELECTION_SORT:
-        sort = sorter as SELECTION_SORT;
-        return {
-          [styles.sorted]: index < sort?.startIndex,
-          [styles['highlight-1']]: index === sort?.startIndex,
-          [styles['highlight-2']]: index === sort?.currentMinIndex,
-          [styles['highlight-3']]: index === sort?.scanIndex,
-        };
-
-      default:
-        return {};
+    if (sorter) {
+      handleSort(sorter, algorithmSpeed, false);
     }
   };
 
-  useEffect(() => {
-    if (activeAlgorithmName?.length) {
-      sorterRef.current = new algorithmClasses[activeAlgorithmName](array);
-    }
-  }, [activeAlgorithmName]);
+  const initializeVisualization = () => {
+    const newInitArray = initArray.slice();
+    setArray(newInitArray);
+    setMax(Math.max(...newInitArray.map((entry) => entry.value)));
 
-  /* FOR TESTING WITHOUT CONTROLS: TODO - REMOVE */
+    sorterRef
+        .current = new algorithmClasses[activeAlgorithmName]([...newInitArray]);
+  };
+
   useEffect(() => {
-    if (sorter?.name === activeAlgorithmName) {
-      startSorting();
+    if (initArray.length && activeAlgorithmName.length) {
+      stopVisualization();
+      initializeVisualization();
     }
-  }, [sorterRef.current?.name]);
+  }, [activeAlgorithmName, initArray]);
+
+  useEffect(() => {
+    if (resetVisualization) {
+      stopVisualization();
+      initializeVisualization();
+    }
+  }, [resetVisualization]);
 
   useEffect(() => {
     if (canPlayVisualization) {
-      startSorting();
+      window.clearTimeout(timer);
+      startVisualization();
+    }
+  }, [algorithmSpeed]);
+
+  useEffect(() => {
+    if (canPlayVisualizationStep && sorterRef.current) {
+      stopVisualization();
+      handleSort(sorterRef.current, algorithmSpeed, true);
+    }
+  }, [canPlayVisualizationStep]);
+
+  useEffect(() => {
+    if (canPlayVisualization) {
+      startVisualization();
+    } else {
+      window.clearTimeout(timer);
     }
   }, [canPlayVisualization]);
 
@@ -131,13 +129,30 @@ function Viewer(): JSX.Element {
   }, []);
 
   return (
-    <article className={styles['viewer-component']}>
+    <article className={styles.viewerComponent}>
+      <section className={styles.titleBar}>
+        <h1 className={styles.titleBar__title}>
+          {sorter?.name?.toLowerCase()?.replace(/_/g, ' ')}
+          :
+        </h1>
+
+        <div className={styles.titleBar__tags}>
+          { Object.entries(algorithmInfo.complexity).map(([key, value])=>(
+            <div key={key} className={styles.titleBar__complexity}>
+              <p>worst case {key} complexity:</p>
+              {' '}
+              <p dangerouslySetInnerHTML={{__html: value}}/>
+            </div>
+          )) }
+        </div>
+      </section>
+
       <section className={styles.visualizer}>
         { array.map(({key, value}, index) => (
           <motion.div
             key={key}
-            className={cn(styles['visualizer-bar'], {
-              ...getVisualizerBarClassNames(index),
+            className={cn(styles.visualizerBar, {
+              ...getVisualizerBarClasses(sorter, activeAlgorithmName, index),
             })}
             style={{
               width: `${(1 / array.length) * 100}%`,
@@ -145,18 +160,66 @@ function Viewer(): JSX.Element {
             layout
           >
             <div
-              className={styles['visualizer-bar__bar']}
+              className={styles.visualizerBar__bar}
               style={{
-                // transform: `scaleY(${((num / max) * 0.99) + 0.01})`,
-                transform: `scaleY(${value / max})`,
+                height: `${(value / max) * 100}%`,
               }}
             />
 
-            <div className={styles['visualizer-bar__label']}>
+            <div className={styles.visualizerBar__label}>
               { value }
             </div>
           </motion.div>
         )) }
+      </section>
+
+      <section className={styles.info}>
+        <section className={styles.info__legend}>
+          {legends.map(([key, value], index) => (
+            <div
+              key={index}
+              className={cn(styles.info__legend__definition, key)}
+            >
+              <div className={styles.legendTile} />
+              <span>{value}</span>
+            </div>
+          ))}
+        </section>
+
+        <section className={styles.info__explanation}>
+          <div>
+            <strong>Explanation:</strong>
+            <br/>
+            <br/>
+            {sorter?.annotation || algorithmInfo.description }
+          </div>
+
+          <div>
+            <strong>References:</strong>
+            {' '}
+            { algorithmInfo.references.map((ref, ind, arr) => (
+              <>
+                <a
+                  key={ref.link}
+                  href={ref.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {ref.title}
+                  {' '}
+                  <Image
+                    src="/icons/icon-external-link.svg"
+                    alt=""
+                    width={10}
+                    height={10}
+                  />
+                </a>
+
+                { ind === arr.length - 1 ? '.' : ', '}
+              </>
+            )) }
+          </div>
+        </section>
       </section>
     </article>
   );
