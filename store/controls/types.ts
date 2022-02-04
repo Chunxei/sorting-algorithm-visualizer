@@ -4,7 +4,9 @@ import {ArrayEntry} from '../../utils/algorithms/types';
 export const SET_ALGORITHM_SPEED = 'SET_ALGORITHM_SPEED';
 export const SET_ACTIVE_ALGORITHM = 'SET_ACTIVE_ALGORITHM';
 export const PLAY_VISUALIZATION = 'PLAY_VISUALIZATION';
-export const PLAY_VISUALIZATION_STEP = 'PLAY_VISUALIZATION_STEP';
+export const PLAY_WITHOUT_VISUALIZATION = 'PLAY_WITHOUT_VISUALIZATION';
+export const STEP_VISUALIZATION_FORWARD = 'STEP_VISUALIZATION_FORWARD';
+export const STEP_VISUALIZATION_BACKWARD = 'STEP_VISUALIZATION_BACKWARD';
 export const RESET_VISUALIZATION = 'RESET_VISUALIZATION';
 export const SET_ARRAY = 'SET_ARRAY';
 
@@ -12,7 +14,9 @@ export interface ControlsState {
   algorithmSpeed: number
   activeAlgorithmName: AlgorithmName
   canPlayVisualization: boolean
-  canPlayVisualizationStep: boolean
+  canPlayWithoutVisualization: boolean
+  canStepVisualizationForward: boolean
+  canStepVisualizationBackward: boolean
   array: ArrayEntry[]
   resetVisualization: boolean
 }
@@ -32,8 +36,18 @@ export interface PlayVisualization {
   data: boolean
 }
 
-export interface PlayVisualizationStep {
-  type: typeof PLAY_VISUALIZATION_STEP
+export interface PlayWithoutVisualization {
+  type: typeof PLAY_WITHOUT_VISUALIZATION
+  data: boolean
+}
+
+export interface StepVisualizationForward {
+  type: typeof STEP_VISUALIZATION_FORWARD
+  data: boolean
+}
+
+export interface StepVisualizationBackward {
+  type: typeof STEP_VISUALIZATION_BACKWARD
   data: boolean
 }
 
@@ -50,7 +64,10 @@ export interface SetArray {
 export type ControlsAction = SetAlgorithmSpeed
   | SetActiveAlgorithm
   | PlayVisualization
-  | PlayVisualizationStep
+  | PlayWithoutVisualization
+  | StepVisualizationForward
+  | StepVisualizationBackward
   | ResetVisualization
   | SetArray;
+
 export type ControlsDispatch = (action: ControlsAction) => void;

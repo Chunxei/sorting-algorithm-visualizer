@@ -1,10 +1,16 @@
-import React, {ChangeEventHandler} from 'react';
+import React, {ChangeEventHandler, useState} from 'react';
 import styles from './header.module.scss';
+import Image from 'next/image';
 import {useControlsContext} from '../../store/controls/provider';
-import {controlsActions} from '../../store/controls/actions';
+import {
+  controlsActions,
+  controlsTransientActions,
+} from '../../store/controls/actions';
 import {AlgorithmName, algorithmNames} from '../../utils/algorithms';
 import {clampedRandom} from '../../utils/helpers/randomizer';
 import {ArrayEntry} from '../../utils/algorithms/types';
+import cn from 'classnames';
+import useClickOutside from '../../hooks/useClickOutside';
 
 /**
  * Header component hosting visualizer controls
@@ -18,24 +24,26 @@ function Header(): JSX.Element {
     algorithmSpeed,
     array,
   } = state;
+
+  const [showControlsMenu, setShowControlsMenu] = useState<boolean>(true);
+
   const algoNames = React.useMemo(() => Object.keys(algorithmNames), []);
 
-  const togglePlayVisualization = () => {
+  const handleMenuButtonClick = () => {
+    setShowControlsMenu((prev) => !prev);
+  };
+
+  const playOrPauseVisualization = () => {
     dispatch(controlsActions.playVisualization(!canPlayVisualization));
   };
 
-  const playVisualizationStep = () => {
-    dispatch(controlsActions.playVisualizationStep(true));
+  const quickToggleControl = (
+      action: keyof typeof controlsTransientActions,
+  ) => {
+    dispatch(controlsTransientActions[action](true));
     window.setTimeout(() => {
-      dispatch(controlsActions.playVisualizationStep(false));
-    }, 100);
-  };
-
-  const resetVisualization = () => {
-    dispatch(controlsActions.resetVisualization(true));
-    window.setTimeout(() => {
-      dispatch(controlsActions.resetVisualization(false));
-    }, 100);
+      dispatch(controlsTransientActions[action](false));
+    }, 50);
   };
 
   const selectAlgorithm: ChangeEventHandler<HTMLSelectElement> = (event) => {
@@ -52,16 +60,47 @@ function Header(): JSX.Element {
     const length = parseInt(event.target.value);
     const arrayToSort = Array.from({length}, (_, i): ArrayEntry => ({
       key: i,
-      value: clampedRandom(10, 200),
+      value: clampedRandom(5, 555),
     }));
     dispatch(controlsActions.setArray(arrayToSort));
   };
 
+  useClickOutside('controls-menu',
+      showControlsMenu,
+      () => setShowControlsMenu(false),
+  );
+
   return (
     <header className={styles.headerComponent}>
-      <nav className={styles.nav}>
-        <h1>Alviz</h1>
+      <h1>Sorting Algorithm Visualizer</h1>
 
+      <button
+        className={cn(styles.menuButton, {
+          [styles.active]: showControlsMenu,
+        })}
+        onClick={handleMenuButtonClick}
+        aria-label="toggle control menu"
+      >
+        <span>
+          <Image
+            src="/icons/icon-settings.svg"
+            alt="..."
+            width={15}
+            height={15}
+          />
+
+          <span>
+            Controls
+          </span>
+        </span>
+      </button>
+
+      <nav
+        id="controls-menu"
+        className={cn(styles.nav, {
+          [styles.visible]: showControlsMenu,
+        })}
+      >
         <ul>
           <li>
             <label htmlFor="algorithmName">
@@ -89,8 +128,7 @@ function Header(): JSX.Element {
           <li>
             <label htmlFor="algorithmSpeed">
               Speed:
-              {' '}
-              <span>1</span>
+
               <input
                 type="range"
                 id="algorithmSpeed"
@@ -101,7 +139,8 @@ function Header(): JSX.Element {
                 value={(1011 - algorithmSpeed) / 10}
                 onChange={selectSpeed}
               />
-              100
+
+              <p>{((1011 - algorithmSpeed) / 10) - 1}</p>
             </label>
           </li>
 
@@ -109,7 +148,7 @@ function Header(): JSX.Element {
             <label htmlFor="arraySize">
               Array Size:
               {' '}
-              <span>5</span>
+
               <input
                 type="range"
                 id="arraySize"
@@ -120,39 +159,63 @@ function Header(): JSX.Element {
                 value={array.length}
                 onChange={generateArray}
               />
-              50
+
+              <p>{array.length}</p>
             </label>
           </li>
 
           <li>
             <button
-              onClick={resetVisualization}
+              onClick={() => playOrPauseVisualization()}
+              aria-label="play/pause"
             >
-              Instant
+              <span>
+                {canPlayVisualization ? 'Pause' : 'Play'}
+              </span>
             </button>
           </li>
 
           <li>
             <button
-              onClick={playVisualizationStep}
+              onClick={() => quickToggleControl('stepVisualizationBackward')}
+              aria-label="previous step"
             >
-              Step
+              <span>
+                Prev Step
+              </span>
             </button>
           </li>
 
           <li>
             <button
-              onClick={() => togglePlayVisualization()}
+              onClick={() => quickToggleControl('stepVisualizationForward')}
+              aria-label="next step"
             >
-              {canPlayVisualization ? 'Pause' : 'Play'}
+              <span>
+                Next Step
+              </span>
             </button>
           </li>
 
           <li>
             <button
-              onClick={resetVisualization}
+              onClick={() => quickToggleControl('playWithoutVisualization')}
+              aria-label="instant sort"
             >
-              Reset
+              <span>
+                Instant Sort
+              </span>
+            </button>
+          </li>
+
+          <li>
+            <button
+              onClick={() => quickToggleControl('resetVisualization')}
+              aria-label="reset"
+            >
+              <span>
+                Reset
+              </span>
             </button>
           </li>
         </ul>

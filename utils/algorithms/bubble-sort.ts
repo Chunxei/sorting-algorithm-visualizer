@@ -1,4 +1,4 @@
-import {AlgorithmInfo, ArrayEntry, ArraySorterReturnValues} from './types';
+import {AlgorithmInfo, ArrayEntry} from './types';
 import {algorithmNames} from './index';
 import {ARRAY_SORT} from './array-sort';
 
@@ -8,181 +8,57 @@ import {ARRAY_SORT} from './array-sort';
  * */
 export class BUBBLE_SORT extends ARRAY_SORT {
   public name = algorithmNames.BUBBLE_SORT;
-  public annotation = '';
-  readonly _array: ArrayEntry[];
-  private _leftIndex: number;
-  private _rightIndex: number;
-  private _lastIndex: number;
 
   /**
    * @param {ArrayEntry[]} array - the array to be sorted
    * @constructs {BUBBLE_SORT}
    * */
   constructor(array: ArrayEntry[]) {
-    super();
-    this._array = array;
-    this._leftIndex = 0;
-    this._rightIndex = 1;
-    this._lastIndex = array.length - 1;
-  }
-
-  /**
-   * Bubble Sort algorithm step function.
-   * Executes a single step in the sorting process,
-   * and annotates it.
-   *
-   * @return {ArraySorterReturnValues}
-   * */
-  sortOnce(): ArraySorterReturnValues {
-    if (this._lastIndex > 0) {
-      if (
-        this._array[this._leftIndex].value >
-        this._array[this._rightIndex].value
-      ) {
-        /* swap entries */
-        [
-          this._array[this._leftIndex], this._array[this._rightIndex],
-        ] = [
-          this._array[this._rightIndex], this._array[this._leftIndex],
-        ];
-
-        this.annotation = `array[leftIndex] > array[rightIndex],
-          therefore SWAP.`;
-      } else {
-        this._leftIndex++;
-        this._rightIndex++;
-
-        this.annotation = `array[leftIndex] < array[rightIndex],
-          therefore ADVANCE.`;
-      }
-
-      if (this._rightIndex > this._lastIndex) {
-        this._leftIndex = 0;
-        this._rightIndex = 1;
-        this._lastIndex--;
-
-        this.annotation = `End of the unsorted portion of the array
-          reached, therefore RESET indexes and DECREMENT the last index.`;
-      }
-    }
-
-    if (this._lastIndex < 1) {
-      this.annotation = 'Array fully sorted, therefore END.';
-    }
-
-    return this.values;
+    super(array);
+    this._sortIntoStages();
   }
 
   /**
    * Bubble Sort algorithm function.
-   *
-   * @return {ArrayEntry[]}
+   * Populates this._stageArray with the array at each step
    * */
-  sort(): ArrayEntry[] {
-    this.annotation = '';
-    this._leftIndex = 0;
-    this._rightIndex = 1;
-    this._lastIndex = this._array.length - 1;
+  protected _sortIntoStages(): void {
+    this.annotations = [];
 
-    while (this._lastIndex > 0) {
+    let leftIndex = 0;
+    let rightIndex = 1;
+    let lastIndex = this._array.length - 1;
+
+    while (lastIndex > 0) {
+      this._updateStageArray([
+        leftIndex,
+        rightIndex,
+        lastIndex,
+      ]);
+
       if (
-        this._array[this._leftIndex].value >
-        this._array[this._rightIndex].value
+        this._array[leftIndex].value >
+        this._array[rightIndex].value
       ) {
         /* swap entries */
-        [
-          this._array[this._leftIndex], this._array[this._rightIndex],
-        ] = [
-          this._array[this._rightIndex], this._array[this._leftIndex],
-        ];
+        this._swap(leftIndex, rightIndex);
+
+        this._updateStageArray([
+          leftIndex,
+          rightIndex,
+          lastIndex,
+        ]);
       }
 
-      this._leftIndex++;
-      this._rightIndex++;
+      leftIndex++;
+      rightIndex++;
 
-      if (this._rightIndex > this._lastIndex) {
-        this._leftIndex = 0;
-        this._rightIndex = 1;
-        this._lastIndex--;
+      if (rightIndex > lastIndex) {
+        leftIndex = 0;
+        rightIndex = 1;
+        lastIndex--;
       }
     }
-
-    return this._array;
-  }
-
-  /**
-   * get the leftIndex's current state
-   * @return {ArraySorterReturnValues}
-   * */
-  get values(): ArraySorterReturnValues {
-    return {
-      array: this._array,
-      indexes: [this._leftIndex, this._rightIndex, this._lastIndex],
-    };
-  }
-
-  /**
-   * sets new values for this._leftIndex, this._rightIndex & this._lastIndex
-   * in that order
-   * @param {[number, number, number]} values - the ordered values to assign
-   * to the indexes
-   * */
-  set indexes(values: [number, number, number]) {
-    this._leftIndex = values[0];
-    this._rightIndex = values[1];
-    this._lastIndex = values[2];
-  }
-
-  /**
-   * check whether the array has been fully sorted
-   * @return {boolean}
-   * */
-  get done(): boolean {
-    return this._lastIndex < 1;
-  }
-
-  /* --------ALGORITHM-SPECIFIC PROPERTIES 👇🏾 ---------- */
-
-  /** get the leftIndex's current state
-   * @return {number}
-   * */
-  get leftIndex(): number {
-    return this._leftIndex;
-  }
-
-  /** set a new array
-   * @param {number} index - the new value of _leftIndex
-   * */
-  set leftIndex(index: number) {
-    this._leftIndex = index;
-  }
-
-  /** get the rightIndex's current state
-   * @return {number}
-   * */
-  get rightIndex(): number {
-    return this._rightIndex;
-  }
-
-  /** set a new array
-   * @param {number} index - the new value of _rightIndex
-   * */
-  set rightIndex(index: number) {
-    this._rightIndex = index;
-  }
-
-  /** get the rightIndex's current state
-   * @return {number}
-   * */
-  get lastIndex(): number {
-    return this._lastIndex;
-  }
-
-  /** set a new array
-   * @param {number} index - the new value of _lastIndex
-   * */
-  set lastIndex(index: number) {
-    this._lastIndex = index;
   }
 }
 

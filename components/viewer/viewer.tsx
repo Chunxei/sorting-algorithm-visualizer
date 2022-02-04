@@ -25,7 +25,9 @@ function Viewer(): JSX.Element {
   const {state, dispatch} = useControlsContext();
   const {
     canPlayVisualization,
-    canPlayVisualizationStep,
+    canPlayWithoutVisualization,
+    canStepVisualizationForward,
+    canStepVisualizationBackward,
     activeAlgorithmName,
     algorithmSpeed,
     array: initArray,
@@ -52,6 +54,13 @@ function Viewer(): JSX.Element {
     window.clearTimeout(timer);
   };
 
+  const handleImmediateSort = () => {
+    if (sorter) {
+      const newArray = sorter.sort();
+      setArray(newArray);
+    }
+  };
+
   const handleSort = (
       sorterData: AlgorithmClass,
       speed: number,
@@ -59,7 +68,22 @@ function Viewer(): JSX.Element {
   ) => {
     const {array: newArray} = sorterData.sortOnce();
     setArray(newArray);
-    sorterRef.current = sorterData;
+
+    if ((sorterData.done && canPlayVisualization) || stepOnce) {
+      stopVisualization();
+    } else {
+      const timeout = window.setTimeout(handleSort, speed, sorterData, speed);
+      setTimer(timeout);
+    }
+  };
+
+  const handleUnsort = (
+      sorterData: AlgorithmClass,
+      speed: number,
+      stepOnce?: boolean,
+  ) => {
+    const {array: newArray} = sorterData.unsortOnce();
+    setArray(newArray);
 
     if ((sorterData.done && canPlayVisualization) || stepOnce) {
       stopVisualization();
@@ -108,11 +132,24 @@ function Viewer(): JSX.Element {
   }, [algorithmSpeed]);
 
   useEffect(() => {
-    if (canPlayVisualizationStep && sorterRef.current) {
+    if (canStepVisualizationForward && sorterRef.current) {
       stopVisualization();
       handleSort(sorterRef.current, algorithmSpeed, true);
     }
-  }, [canPlayVisualizationStep]);
+  }, [canStepVisualizationForward]);
+
+  useEffect(() => {
+    if (canStepVisualizationBackward && sorterRef.current) {
+      stopVisualization();
+      handleUnsort(sorterRef.current, algorithmSpeed, true);
+    }
+  }, [canStepVisualizationBackward]);
+
+  useEffect(() => {
+    if (canPlayWithoutVisualization && sorterRef.current) {
+      handleImmediateSort();
+    }
+  }, [canPlayWithoutVisualization]);
 
   useEffect(() => {
     if (canPlayVisualization) {
@@ -139,7 +176,7 @@ function Viewer(): JSX.Element {
         <div className={styles.titleBar__tags}>
           { Object.entries(algorithmInfo.complexity).map(([key, value])=>(
             <div key={key} className={styles.titleBar__complexity}>
-              <p>worst case {key} complexity:</p>
+              <p>worst-case {key} complexity:</p>
               {' '}
               <p dangerouslySetInnerHTML={{__html: value}}/>
             </div>
@@ -147,12 +184,18 @@ function Viewer(): JSX.Element {
         </div>
       </section>
 
-      <section className={styles.visualizer}>
+      <section
+        className={cn(styles.visualizer, {
+          [styles.dense]: array.length > 30,
+        })}
+      >
         { array.map(({key, value}, index) => (
           <motion.div
             key={key}
             className={cn(styles.visualizerBar, {
               ...getVisualizerBarClasses(sorter, activeAlgorithmName, index),
+              [styles.firstEntry]: index === 0,
+              [styles.lastEntry]: index === array.length - 1,
             })}
             style={{
               width: `${(1 / array.length) * 100}%`,
@@ -161,6 +204,7 @@ function Viewer(): JSX.Element {
           >
             <div
               className={styles.visualizerBar__bar}
+              data-value={value}
               style={{
                 height: `${(value / max) * 100}%`,
               }}
@@ -191,16 +235,15 @@ function Viewer(): JSX.Element {
             <strong>Explanation:</strong>
             <br/>
             <br/>
-            {sorter?.annotation || algorithmInfo.description }
+            {sorter?.values?.annotation || algorithmInfo.description}
           </div>
 
           <div>
             <strong>References:</strong>
             {' '}
             { algorithmInfo.references.map((ref, ind, arr) => (
-              <>
+              <React.Fragment key={ref.link}>
                 <a
-                  key={ref.link}
                   href={ref.link}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -214,10 +257,26 @@ function Viewer(): JSX.Element {
                     height={10}
                   />
                 </a>
-
-                { ind === arr.length - 1 ? '.' : ', '}
-              </>
+                ,
+                {' '}
+              </React.Fragment>
             )) }
+
+            <a
+              href="https://www.bigocheatsheet.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Big O Cheatsheet
+              {' '}
+              <Image
+                src="/icons/icon-external-link.svg"
+                alt=""
+                width={10}
+                height={10}
+              />
+            </a>
+            .
           </div>
         </section>
       </section>

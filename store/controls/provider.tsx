@@ -29,6 +29,7 @@ export const useControlsContext = () => {
  * */
 function ControlsProvider({children}: ControlsProviderProps): JSX.Element {
   const [state, dispatch] = useReducer(controlsReducer, controlsState);
+
   return (
     <ControlsContext.Provider value={{state, dispatch}}>
       { children }

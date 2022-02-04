@@ -6,6 +6,7 @@ export interface ArrayEntry {
 export interface ArraySorterReturnValues {
   array: ArrayEntry[]
   indexes: number[]
+  annotation?: string
 }
 
 export interface AlgorithmInfo {

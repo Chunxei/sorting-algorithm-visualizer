@@ -1,8 +1,8 @@
 import {
   PLAY_VISUALIZATION,
-  PLAY_VISUALIZATION_STEP,
+  PLAY_WITHOUT_VISUALIZATION,
   PlayVisualization,
-  PlayVisualizationStep,
+  PlayWithoutVisualization,
   RESET_VISUALIZATION,
   ResetVisualization,
   SET_ACTIVE_ALGORITHM,
@@ -11,6 +11,10 @@ import {
   SetActiveAlgorithm,
   SetAlgorithmSpeed,
   SetArray,
+  STEP_VISUALIZATION_BACKWARD,
+  STEP_VISUALIZATION_FORWARD,
+  StepVisualizationBackward,
+  StepVisualizationForward,
 } from './types';
 
 import {AlgorithmName} from '../../utils/algorithms';
@@ -31,8 +35,24 @@ const playVisualization = (canPlay: boolean): PlayVisualization => ({
   data: canPlay,
 });
 
-const playVisualizationStep = (canPlay: boolean): PlayVisualizationStep => ({
-  type: PLAY_VISUALIZATION_STEP,
+const playWithoutVisualization = (
+    canPlay: boolean,
+): PlayWithoutVisualization => ({
+  type: PLAY_WITHOUT_VISUALIZATION,
+  data: canPlay,
+});
+
+const stepVisualizationForward = (
+    canPlay: boolean,
+): StepVisualizationForward => ({
+  type: STEP_VISUALIZATION_FORWARD,
+  data: canPlay,
+});
+
+const stepVisualizationBackward = (
+    canPlay: boolean,
+): StepVisualizationBackward => ({
+  type: STEP_VISUALIZATION_BACKWARD,
   data: canPlay,
 });
 
@@ -50,7 +70,12 @@ export const controlsActions = {
   setAlgorithmSpeed,
   setActiveAlgorithm,
   playVisualization,
-  playVisualizationStep,
-  resetVisualization,
   setArray,
-};
+} as const;
+
+export const controlsTransientActions = {
+  playWithoutVisualization,
+  stepVisualizationForward,
+  stepVisualizationBackward,
+  resetVisualization,
+} as const;
