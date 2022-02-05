@@ -24,14 +24,15 @@ interface ArrayEntry {
 function Viewer(): JSX.Element {
   const {state, dispatch} = useControlsContext();
   const {
+    array: initArray,
+    algorithmSpeed,
+    activeAlgorithmName,
     canPlayVisualization,
     canPlayWithoutVisualization,
     canStepVisualizationForward,
     canStepVisualizationBackward,
-    activeAlgorithmName,
-    algorithmSpeed,
-    array: initArray,
     resetVisualization,
+    playbackPosition,
   } = state;
 
   const [timer, setTimer] = useState<number | undefined>(undefined);
@@ -54,10 +55,17 @@ function Viewer(): JSX.Element {
     window.clearTimeout(timer);
   };
 
-  const handleImmediateSort = () => {
+  const goToPlaybackPosition = (position: number) => {
     if (sorter) {
-      const newArray = sorter.sort();
+      const {array: newArray} = sorter.sortAt(position);
       setArray(newArray);
+      dispatch(controlsActions.setPlaybackPosition(position));
+    }
+  };
+
+  const handleFlashSort = () => {
+    if (sorter) {
+      goToPlaybackPosition(sorter.stages - 1);
     }
   };
 
@@ -68,6 +76,7 @@ function Viewer(): JSX.Element {
   ) => {
     const {array: newArray} = sorterData.sortOnce();
     setArray(newArray);
+    dispatch(controlsActions.setPlaybackPosition(sorterData.stageIndex));
 
     if ((sorterData.done && canPlayVisualization) || stepOnce) {
       stopVisualization();
@@ -84,6 +93,7 @@ function Viewer(): JSX.Element {
   ) => {
     const {array: newArray} = sorterData.unsortOnce();
     setArray(newArray);
+    dispatch(controlsActions.setPlaybackPosition(sorterData.stageIndex));
 
     if ((sorterData.done && canPlayVisualization) || stepOnce) {
       stopVisualization();
@@ -108,7 +118,19 @@ function Viewer(): JSX.Element {
 
     sorterRef
         .current = new algorithmClasses[activeAlgorithmName]([...newInitArray]);
+
+    dispatch(controlsActions.setPlaybackLength(sorterRef.current?.stages - 1));
+    dispatch(controlsActions.setPlaybackPosition(0));
   };
+
+  useEffect(() => {
+    if (
+      sorterRef.current &&
+      playbackPosition !== sorterRef.current?.stageIndex
+    ) {
+      goToPlaybackPosition(playbackPosition);
+    }
+  }, [playbackPosition]);
 
   useEffect(() => {
     if (initArray.length && activeAlgorithmName.length) {
@@ -147,7 +169,7 @@ function Viewer(): JSX.Element {
 
   useEffect(() => {
     if (canPlayWithoutVisualization && sorterRef.current) {
-      handleImmediateSort();
+      handleFlashSort();
     }
   }, [canPlayWithoutVisualization]);
 

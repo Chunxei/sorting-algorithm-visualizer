@@ -6,7 +6,7 @@ import {
   RESET_VISUALIZATION,
   SET_ACTIVE_ALGORITHM,
   SET_ALGORITHM_SPEED,
-  SET_ARRAY,
+  SET_ARRAY, SET_PLAYBACK_LENGTH, SET_PLAYBACK_POSITION,
   STEP_VISUALIZATION_BACKWARD,
   STEP_VISUALIZATION_FORWARD,
 } from './types';
@@ -14,7 +14,13 @@ import {AlgorithmName, algorithmNames} from '../../utils/algorithms';
 import {ArrayEntry} from '../../utils/algorithms/types';
 import {clampedRandom} from '../../utils/helpers/randomizer';
 
+const initArray = Array.from({length: 30}, (_, i): ArrayEntry => ({
+  key: i,
+  value: clampedRandom(5, 555),
+}));
+
 export const controlsState: ControlsState = {
+  array: initArray,
   algorithmSpeed: 301,
   activeAlgorithmName: algorithmNames.BUBBLE_SORT,
   canPlayVisualization: false,
@@ -22,19 +28,21 @@ export const controlsState: ControlsState = {
   canStepVisualizationForward: false,
   canStepVisualizationBackward: false,
   resetVisualization: false,
-  array: Array.from({length: 30}, (_, i): ArrayEntry => ({
-    key: i,
-    value: clampedRandom(5, 555),
-  })),
+  //
+  playbackPosition: 0,
+  playbackLength: initArray.length - 1,
 };
 
 export const controlsReducer = (
     state = controlsState,
     action: ControlsAction,
 ): ControlsState => {
-  // console.log('[ACTION DATA]:', action?.data);
+  console.log('[ACTION DATA]:', action?.data);
 
   switch (action.type) {
+    case SET_ARRAY:
+      return {...state, array: action.data};
+
     case SET_ALGORITHM_SPEED:
       return {...state, algorithmSpeed: action.data};
 
@@ -56,8 +64,11 @@ export const controlsReducer = (
     case RESET_VISUALIZATION:
       return {...state, resetVisualization: action.data};
 
-    case SET_ARRAY:
-      return {...state, array: action.data};
+    case SET_PLAYBACK_POSITION:
+      return {...state, playbackPosition: action.data};
+
+    case SET_PLAYBACK_LENGTH:
+      return {...state, playbackLength: action.data};
 
     default:
       return state;

@@ -28,8 +28,8 @@ abstract class ABSTRACT_SORT {
 
   protected abstract _sortIntoStages(...args: any[]): void
 
-  /** sort the entire array in one step */
-  abstract sort(): ArrayEntry[]
+  /** sort the array up to a specified stage, and return the result */
+  abstract sortAt(position: number): ArraySorterReturnValues
 
   /** perform one step forward in the sorting process */
   abstract sortOnce(): ArraySorterReturnValues
@@ -113,14 +113,19 @@ export class ARRAY_SORT extends ABSTRACT_SORT {
   protected _sortIntoStages(...args: any[]): void {};
 
   /**
-   * Return the final sorted array.
+   * Update _stageIndex with the specified index and return
+   * the state of _stageArray at that index.
    *
-   * @return {ArrayEntry[]}
+   * @param {number} stageIndex - index of the array state to return
+   * @return {ArraySorterReturnValues}
    * */
-  sort(): ArrayEntry[] {
-    this._stageIndex = this._stageArray.length - 1;
+  sortAt(stageIndex: number): ArraySorterReturnValues {
+    this._stageIndex = Math.max(
+        0,
+        Math.min(this._stageArray.length - 1, stageIndex),
+    );
 
-    return this._stageArray[this._stageIndex].array;
+    return this._stageArray[this._stageIndex];
   }
 
   /**
@@ -170,6 +175,14 @@ export class ARRAY_SORT extends ABSTRACT_SORT {
   }
 
   /**
+   * set a new array
+   * @param {number} index - the new value of _stageIndex
+   * */
+  set stageIndex(index: number) {
+    this._stageIndex = index;
+  }
+
+  /**
    * get the _stageIndex's current state
    * @return {number}
    * */
@@ -178,11 +191,11 @@ export class ARRAY_SORT extends ABSTRACT_SORT {
   }
 
   /**
-   * set a new array
-   * @param {number} index - the new value of _stageIndex
+   * get the number of stages in _stageArray
+   * @return {number}
    * */
-  set stageIndex(index: number) {
-    this._stageIndex = index;
+  get stages(): number {
+    return this._stageArray.length;
   }
 
   /**

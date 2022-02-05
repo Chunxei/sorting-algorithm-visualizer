@@ -1,6 +1,7 @@
 import {AlgorithmName} from '../../utils/algorithms';
 import {ArrayEntry} from '../../utils/algorithms/types';
 
+export const SET_ARRAY = 'SET_ARRAY';
 export const SET_ALGORITHM_SPEED = 'SET_ALGORITHM_SPEED';
 export const SET_ACTIVE_ALGORITHM = 'SET_ACTIVE_ALGORITHM';
 export const PLAY_VISUALIZATION = 'PLAY_VISUALIZATION';
@@ -8,17 +9,26 @@ export const PLAY_WITHOUT_VISUALIZATION = 'PLAY_WITHOUT_VISUALIZATION';
 export const STEP_VISUALIZATION_FORWARD = 'STEP_VISUALIZATION_FORWARD';
 export const STEP_VISUALIZATION_BACKWARD = 'STEP_VISUALIZATION_BACKWARD';
 export const RESET_VISUALIZATION = 'RESET_VISUALIZATION';
-export const SET_ARRAY = 'SET_ARRAY';
+export const SET_PLAYBACK_POSITION = 'SET_PLAYBACK_POSITION';
+export const SET_PLAYBACK_LENGTH = 'SET_PLAYBACK_LENGTH';
 
 export interface ControlsState {
+  array: ArrayEntry[]
   algorithmSpeed: number
   activeAlgorithmName: AlgorithmName
   canPlayVisualization: boolean
   canPlayWithoutVisualization: boolean
   canStepVisualizationForward: boolean
   canStepVisualizationBackward: boolean
-  array: ArrayEntry[]
   resetVisualization: boolean
+  //
+  playbackPosition: number,
+  playbackLength: number
+}
+
+export interface SetArray {
+  type: typeof SET_ARRAY
+  data: ArrayEntry[]
 }
 
 export interface SetActiveAlgorithm {
@@ -56,18 +66,25 @@ export interface ResetVisualization {
   data: boolean
 }
 
-export interface SetArray {
-  type: typeof SET_ARRAY
-  data: ArrayEntry[]
+export interface SetPlaybackLength {
+  type: typeof SET_PLAYBACK_LENGTH
+  data: number
+}
+
+export interface SetPlaybackPosition {
+  type: typeof SET_PLAYBACK_POSITION
+  data: number
 }
 
 export type ControlsAction = SetAlgorithmSpeed
+  | SetArray
   | SetActiveAlgorithm
   | PlayVisualization
   | PlayWithoutVisualization
   | StepVisualizationForward
   | StepVisualizationBackward
   | ResetVisualization
-  | SetArray;
+  | SetPlaybackLength
+  | SetPlaybackPosition;
 
 export type ControlsDispatch = (action: ControlsAction) => void;

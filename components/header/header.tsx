@@ -33,19 +33,6 @@ function Header(): JSX.Element {
     setShowControlsMenu((prev) => !prev);
   };
 
-  const playOrPauseVisualization = () => {
-    dispatch(controlsActions.playVisualization(!canPlayVisualization));
-  };
-
-  const quickToggleControl = (
-      action: keyof typeof controlsTransientActions,
-  ) => {
-    dispatch(controlsTransientActions[action](true));
-    window.setTimeout(() => {
-      dispatch(controlsTransientActions[action](false));
-    }, 50);
-  };
-
   const selectAlgorithm: ChangeEventHandler<HTMLSelectElement> = (event) => {
     const name = event.target.value as AlgorithmName;
     dispatch(controlsActions.setActiveAlgorithm(name));
@@ -72,7 +59,7 @@ function Header(): JSX.Element {
 
   return (
     <header className={styles.headerComponent}>
-      <h1>Sorting Algorithm Visualizer</h1>
+      <h1>Alviz</h1>
 
       <button
         className={cn(styles.menuButton, {
@@ -85,12 +72,12 @@ function Header(): JSX.Element {
           <Image
             src="/icons/icon-settings.svg"
             alt="..."
-            width={15}
-            height={15}
+            width={12}
+            height={12}
           />
 
           <span>
-            Controls
+            Configure
           </span>
         </span>
       </button>
@@ -162,61 +149,6 @@ function Header(): JSX.Element {
 
               <p>{array.length}</p>
             </label>
-          </li>
-
-          <li>
-            <button
-              onClick={() => playOrPauseVisualization()}
-              aria-label="play/pause"
-            >
-              <span>
-                {canPlayVisualization ? 'Pause' : 'Play'}
-              </span>
-            </button>
-          </li>
-
-          <li>
-            <button
-              onClick={() => quickToggleControl('stepVisualizationBackward')}
-              aria-label="previous step"
-            >
-              <span>
-                Prev Step
-              </span>
-            </button>
-          </li>
-
-          <li>
-            <button
-              onClick={() => quickToggleControl('stepVisualizationForward')}
-              aria-label="next step"
-            >
-              <span>
-                Next Step
-              </span>
-            </button>
-          </li>
-
-          <li>
-            <button
-              onClick={() => quickToggleControl('playWithoutVisualization')}
-              aria-label="instant sort"
-            >
-              <span>
-                Instant Sort
-              </span>
-            </button>
-          </li>
-
-          <li>
-            <button
-              onClick={() => quickToggleControl('resetVisualization')}
-              aria-label="reset"
-            >
-              <span>
-                Reset
-              </span>
-            </button>
           </li>
         </ul>
       </nav>

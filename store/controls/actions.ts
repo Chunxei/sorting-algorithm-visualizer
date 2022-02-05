@@ -8,9 +8,13 @@ import {
   SET_ACTIVE_ALGORITHM,
   SET_ALGORITHM_SPEED,
   SET_ARRAY,
+  SET_PLAYBACK_LENGTH,
+  SET_PLAYBACK_POSITION,
   SetActiveAlgorithm,
   SetAlgorithmSpeed,
   SetArray,
+  SetPlaybackLength,
+  SetPlaybackPosition,
   STEP_VISUALIZATION_BACKWARD,
   STEP_VISUALIZATION_FORWARD,
   StepVisualizationBackward,
@@ -19,6 +23,11 @@ import {
 
 import {AlgorithmName} from '../../utils/algorithms';
 import {ArrayEntry} from '../../utils/algorithms/types';
+
+const setArray = (array: ArrayEntry[]): SetArray => ({
+  type: SET_ARRAY,
+  data: array,
+});
 
 const setAlgorithmSpeed = (speed: number): SetAlgorithmSpeed => ({
   type: SET_ALGORITHM_SPEED,
@@ -61,18 +70,30 @@ const resetVisualization = (canReset: boolean): ResetVisualization => ({
   data: canReset,
 });
 
-const setArray = (array: ArrayEntry[]): SetArray => ({
-  type: SET_ARRAY,
-  data: array,
+const setPlaybackLength = (length: number): SetPlaybackLength => ({
+  type: SET_PLAYBACK_LENGTH,
+  data: length,
 });
 
+const setPlaybackPosition = (position: number): SetPlaybackPosition => ({
+  type: SET_PLAYBACK_POSITION,
+  data: position,
+});
+
+/* For actions that actively control state */
 export const controlsActions = {
+  setArray,
   setAlgorithmSpeed,
   setActiveAlgorithm,
   playVisualization,
-  setArray,
+  setPlaybackLength,
+  setPlaybackPosition,
 } as const;
 
+/* For actions that act as emitters,
+* and trigger changes that are listened for elsewhere.
+* Typically done by a rapid toggle.
+* */
 export const controlsTransientActions = {
   playWithoutVisualization,
   stepVisualizationForward,
