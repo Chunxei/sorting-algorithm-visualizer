@@ -4,7 +4,6 @@ import Image from 'next/image';
 import {useControlsContext} from '../../store/controls/provider';
 import {
   controlsActions,
-  controlsTransientActions,
 } from '../../store/controls/actions';
 import {AlgorithmName, algorithmNames} from '../../utils/algorithms';
 import {clampedRandom} from '../../utils/helpers/randomizer';
@@ -20,7 +19,6 @@ function Header(): JSX.Element {
   const {state, dispatch} = useControlsContext();
   const {
     activeAlgorithmName,
-    canPlayVisualization,
     algorithmSpeed,
     array,
   } = state;

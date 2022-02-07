@@ -6,7 +6,7 @@ import {
   SELECTION_SORT,
 } from '../../utils/algorithms';
 import styles from './viewer.module.scss';
-import {QUICKSORT} from "../../utils/algorithms/quick-sort";
+import {QUICKSORT} from '../../utils/algorithms/quick-sort';
 
 export const getVisualizerBarClasses = (
     sorter: AlgorithmClass | null,
