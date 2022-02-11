@@ -277,7 +277,7 @@
   column-gap: 10px;
   row-gap: 10px;
   width: 100%;
-  min-width: 300px;
+  min-width: 250px;
   height: 23%;
   color: variables.$green-dark;
   font-size: 0.85rem;
@@ -357,8 +357,8 @@
 
   .info {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-    margin-bottom: 120px;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    margin-bottom: 160px;
 
     &__legend {
       order: 1;
