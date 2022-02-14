@@ -75,13 +75,12 @@ export class SELECTION_SORT extends ARRAY_SORT {
 }
 
 export const selectionSortInfo: AlgorithmInfo = {
-  description: `Bubble sort compares the value at the left index
-    against the value at the right index in each step. If the value
-    at the left index is greater than the value at the right index,
-    the values at both indexes are SWAPPED, and the indexes are
-    incremented. This is repeated until the greatest value in the
-    array is moved to the end of the unsorted portion of the array,
-    which is marked by the last index, and then the process is repeated.`,
+  description: `Selection sort iterates through <code>array</code>,
+    each time finding the the index of the lowest value in the unsorted
+    portion of <code>array</code> (<code>minIndex</code>), and swaps
+    its value with the value at the first index of the unsorted
+    portion of the <code>array</code> (<code>startIndex</code>).
+  `,
 
   complexity: {
     time: 'O(n<sup>2</sup>)',

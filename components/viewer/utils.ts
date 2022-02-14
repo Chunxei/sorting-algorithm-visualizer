@@ -96,7 +96,7 @@ export const getVisualizerLegends = (
       legends = {
         [styles['highlight-1']]: 'Left index',
         [styles['highlight-2']]: 'Right index',
-        [styles['highlight-3']]: 'Last unsorted index',
+        [styles['highlight-3']]: 'Last index',
         ...legends,
       };
       break;
@@ -104,7 +104,7 @@ export const getVisualizerLegends = (
     case algorithmNames.SELECTION_SORT:
       legends = {
         [styles['highlight-1']]: 'Start index',
-        [styles['highlight-2']]: 'Current min index',
+        [styles['highlight-2']]: 'Min index',
         [styles['highlight-3']]: 'Scan index',
         ...legends,
       };

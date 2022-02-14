@@ -29,47 +29,58 @@ export class BUBBLE_SORT extends ARRAY_SORT {
     let rightIndex = 1;
     let lastIndex = this._array.length - 1;
 
-    while (lastIndex > 0) {
-      this._updateStageArray([
-        leftIndex,
-        rightIndex,
-        lastIndex,
-      ]);
+    this._updateStageArray([leftIndex, rightIndex, lastIndex], '');
 
-      if (
-        this._array[leftIndex].value >
-        this._array[rightIndex].value
-      ) {
+    while (lastIndex > 0) {
+      this._updateStageArray([leftIndex, rightIndex, lastIndex], `
+        Check to see if <code>array[leftIndex] > array[rightIndex]</code>.
+      `);
+
+      if (this._array[leftIndex].value > this._array[rightIndex].value) {
         /* swap entries */
         this._swap(leftIndex, rightIndex);
 
-        this._updateStageArray([
-          leftIndex,
-          rightIndex,
-          lastIndex,
-        ]);
+        this._updateStageArray([rightIndex, leftIndex, lastIndex], `
+          <code>array[leftIndex] > array[rightIndex] === true</code>,
+          therefore the values at those indexes are <strong>swapped</strong>.
+        `);
       }
 
       leftIndex++;
       rightIndex++;
 
       if (rightIndex > lastIndex) {
+        this._updateStageArray([leftIndex, rightIndex, lastIndex], `
+          The end of the unsorted portion of the array
+          (marked by <code>lastIndex</code>) has been reached.
+          Therefore <strong>reset</strong> the positions of
+          <code>leftIndex</code> and <code>rightIndex</code>,
+          and decrement <code>lastIndex</code> by <code>1</code>.
+        `);
+
         leftIndex = 0;
         rightIndex = 1;
         lastIndex--;
       }
     }
+
+    this._updateStageArray([leftIndex, rightIndex, lastIndex], `
+      <code>array</code> fully sorted!
+    `);
   }
 }
 
 export const bubbleSortInfo: AlgorithmInfo = {
-  description: `Bubble sort compares the value at the left index
-    against the value at the right index in each step. If the value
-    at the left index is greater than the value at the right index,
-    the values at both indexes are SWAPPED, and the indexes are
-    incremented. This is repeated until the greatest value in the
-    array is moved to the end of the unsorted portion of the array,
-    which is marked by the last index, and then the process is repeated.`,
+  description: `Bubble sort compares the <code>array</code> value at
+    <code>leftIndex</code> against the value at <code>rightIndex</code>
+    in each step. If the value at <code>leftIndex</code> is greater
+    than the value at <code>rightIndex</code>, the values at both indexes
+    themselves are <strong>swapped</strong>, and the indexes are incremented
+    by <code>1</code>. This is repeated until the greatest value in
+    <code>array</code> is moved to the end of the unsorted portion of
+    <code>array</code>, which is marked by <code>lastIndex</code>.
+    <em>This entire process is repeated till the array is fully sorted</em>.
+  `,
 
   complexity: {
     time: 'O(n<sup>2</sup>)',
@@ -87,3 +98,4 @@ export const bubbleSortInfo: AlgorithmInfo = {
     },
   ],
 };
+

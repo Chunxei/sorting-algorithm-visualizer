@@ -337,6 +337,19 @@
     border-radius: 5px;
     padding: 8px;
 
+    &__body {
+      line-height: 1rem;
+
+      code {
+        position: relative;
+        bottom: 1px;
+      }
+
+      em {
+        font-style: italic;
+      }
+    }
+
     a {
       color: variables.$red;
 

@@ -257,7 +257,13 @@ function Viewer(): JSX.Element {
             <strong>Explanation:</strong>
             <br/>
             <br/>
-            {sorter?.values?.annotation || algorithmInfo.description}
+            <p
+              className={styles.info__explanation__body}
+              dangerouslySetInnerHTML={{
+                __html: sorter?.values?.annotation ||
+                algorithmInfo.description,
+              }}
+            />
           </div>
 
           <div>
