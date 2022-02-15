@@ -1,6 +1,7 @@
-import {AlgorithmInfo, ArrayEntry, ArraySorterReturnValues} from './types';
+import {AlgorithmInfo, ArrayEntry} from './types';
 import {algorithmNames} from './index';
 import {ARRAY_SORT} from './array-sort';
+import {insertionSortAnnotations as notes} from './annotations';
 
 /**
  * Creates a new INSERTION_SORT
@@ -24,6 +25,10 @@ export class INSERTION_SORT extends ARRAY_SORT {
    * Populates this._stageArray with the array at each step
    * */
   protected _sortIntoStages(): void {
+    this._updateStageArray([-1, -1], ''); // initialize bars and explanation
+
+    this._updateStageArray([0, 1], notes[0]); // initialize bars and explanation
+
     for (
       let startIndex = 0;
       startIndex < this._array.length - 1;
@@ -31,10 +36,7 @@ export class INSERTION_SORT extends ARRAY_SORT {
     ) {
       let scanIndex = startIndex + 1;
 
-      this._updateStageArray([
-        startIndex,
-        scanIndex,
-      ]);
+      this._updateStageArray([startIndex, scanIndex], notes[1]);
 
       while (
         this._array[scanIndex]?.value <
@@ -43,23 +45,36 @@ export class INSERTION_SORT extends ARRAY_SORT {
         this._swap(scanIndex, scanIndex - 1);
         scanIndex--;
 
-        this._updateStageArray([
-          startIndex + 1,
-          scanIndex,
-        ]);
+        this._updateStageArray([startIndex + 1, scanIndex], notes[2]);
+      }
+
+      if (scanIndex !== startIndex + 1) {
+        this._updateStageArray([startIndex + 1, startIndex + 2], notes[3]);
       }
     }
+
+    this._updateStageArray(
+        [this._array.length, this._array.length + 2],
+        notes[4],
+    );
   }
 }
 
 export const insertionSortInfo: AlgorithmInfo = {
-  description: `Bubble sort compares the value at the left index
-    against the value at the right index in each step. If the value
-    at the left index is greater than the value at the right index,
-    the values at both indexes are SWAPPED, and the indexes are
-    incremented. This is repeated until the greatest value in the
-    array is moved to the end of the unsorted portion of the array,
-    which is marked by the last index, and then the process is repeated.`,
+  description: `<code>startIndex = 0</code> and
+    <code>scanIndex = startIndex + 1</code> are
+    <strong>simultaneously iterated</strong>
+    over <code>array</code>. If
+    <code>array[scanIndex] < array[scanIndex - 1] === true</code>
+    at any point during this,
+    then <code>array[scanIndex]</code> and <code>array[scanIndex - 1]</code>
+    are <strong>swapped</strong>, and <code>scanIndex--</code> occurs.
+    This step is repeated for as long as
+    <code>array[scanIndex] < array[scanIndex - 1] === true</code>. Otherwise,
+    <code>scanIndex</code> is reset to <code>scanIndex = startIndex + 1</code>.
+    <em>This entire process is repeated till <code>array</code>
+    is fully sorted</em>.
+  `,
 
   complexity: {
     time: 'O(n<sup>2</sup>)',

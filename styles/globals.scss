@@ -85,12 +85,12 @@ input {
 
 code {
   background: rgba(variables.$white, 0.6);
-  border: 1px solid rgba(grey, 0.8);
+  border: 1px solid rgba(grey, 0.6);
   border-radius: 3px;
   color: #444;
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  padding: 1px 5px;
-  // margin: 0 2px;
+  padding: 0 5px;
+  margin: 0;
   margin-right: 2px;
 }

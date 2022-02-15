@@ -321,6 +321,12 @@
         }
       }
 
+      &.highlight-0 {
+        .legend-tile {
+          background: variables.$green-medium;
+        }
+      }
+
       @for $bar-index from 1 through 3 {
         @include getBarHighlightStyles($bar-index);
       }
@@ -338,7 +344,9 @@
     padding: 8px;
 
     &__body {
-      line-height: 1rem;
+      font-size: 0.8rem;
+      line-height: 1.1rem;
+      margin-top: 5px;
 
       code {
         position: relative;
@@ -347,6 +355,12 @@
 
       em {
         font-style: italic;
+      }
+
+      u {
+        font-variant: small-caps;
+        font-weight: 600;
+        font-size: 0.9rem;
       }
     }
 

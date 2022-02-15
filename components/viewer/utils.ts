@@ -48,7 +48,7 @@ export const getVisualizerBarClasses = (
         [styles['highlight-1']]: index === startIndex,
         [styles['highlight-2']]: index === currentMinIndex,
         [styles['highlight-3']]: index === scanIndex,
-        [styles.sorted]: index < startIndex,
+        [styles.sorted]: index < startIndex && index < currentMinIndex,
       };
       break;
 
@@ -87,6 +87,7 @@ export const getVisualizerLegends = (
     algorithmName: AlgorithmName,
 ) : Record<string, string> => {
   let legends: Record<string, string> = {
+    [styles['highlight-0']]: 'Unsorted indexes',
     [styles.sorted]: 'Sorted indexes',
     // [styles.done]: 'Done',
   };

@@ -1,6 +1,7 @@
 import {AlgorithmInfo, ArrayEntry} from './types';
 import {algorithmNames} from './index';
 import {ARRAY_SORT} from './array-sort';
+import {bubbleSortAnnotations as notes} from './annotations';
 
 /**
  * Creates a new BUBBLE_SORT
@@ -23,63 +24,58 @@ export class BUBBLE_SORT extends ARRAY_SORT {
    * Populates this._stageArray with the array at each step
    * */
   protected _sortIntoStages(): void {
-    this.annotations = [];
-
     let leftIndex = 0;
     let rightIndex = 1;
     let lastIndex = this._array.length - 1;
 
-    this._updateStageArray([leftIndex, rightIndex, lastIndex], '');
+    // initialize bars and explanation
+    this._updateStageArray([-1, -1, this._array.length], '');
+
+    this._updateStageArray([leftIndex, rightIndex, lastIndex], notes[0]);
 
     while (lastIndex > 0) {
-      this._updateStageArray([leftIndex, rightIndex, lastIndex], `
-        Check to see if <code>array[leftIndex] > array[rightIndex]</code>.
-      `);
+      this._updateStageArray([leftIndex, rightIndex, lastIndex], notes[1]);
 
       if (this._array[leftIndex].value > this._array[rightIndex].value) {
         /* swap entries */
         this._swap(leftIndex, rightIndex);
 
-        this._updateStageArray([rightIndex, leftIndex, lastIndex], `
-          <code>array[leftIndex] > array[rightIndex] === true</code>,
-          therefore the values at those indexes are <strong>swapped</strong>.
-        `);
+        this._updateStageArray([rightIndex, leftIndex, lastIndex], notes[2]);
       }
 
       leftIndex++;
       rightIndex++;
 
       if (rightIndex > lastIndex) {
-        this._updateStageArray([leftIndex, rightIndex, lastIndex], `
-          The end of the unsorted portion of the array
-          (marked by <code>lastIndex</code>) has been reached.
-          Therefore <strong>reset</strong> the positions of
-          <code>leftIndex</code> and <code>rightIndex</code>,
-          and decrement <code>lastIndex</code> by <code>1</code>.
-        `);
+        this._updateStageArray([leftIndex, rightIndex, lastIndex], notes[3]);
 
         leftIndex = 0;
         rightIndex = 1;
         lastIndex--;
+
+        this._updateStageArray([leftIndex, rightIndex, lastIndex], notes[4]);
       }
     }
 
-    this._updateStageArray([leftIndex, rightIndex, lastIndex], `
-      <code>array</code> fully sorted!
-    `);
+    this._updateStageArray([leftIndex, rightIndex, lastIndex], notes[5]);
   }
 }
 
 export const bubbleSortInfo: AlgorithmInfo = {
-  description: `Bubble sort compares the <code>array</code> value at
-    <code>leftIndex</code> against the value at <code>rightIndex</code>
-    in each step. If the value at <code>leftIndex</code> is greater
-    than the value at <code>rightIndex</code>, the values at both indexes
-    themselves are <strong>swapped</strong>, and the indexes are incremented
-    by <code>1</code>. This is repeated until the greatest value in
-    <code>array</code> is moved to the end of the unsorted portion of
-    <code>array</code>, which is marked by <code>lastIndex</code>.
-    <em>This entire process is repeated till the array is fully sorted</em>.
+  description: `<code>leftIndex = 0</code> and
+    <code>rightIndex = leftIndex + 1</code> are
+    <strong>simultaneously iterated</strong>
+    over <code>array</code>. If
+    <code>array[leftIndex] > array[rightIndex] === true</code>
+    at any point during this,
+    then <code>array[leftIndex]</code> and <code>array[leftIndex]</code>
+    are <strong>swapped</strong>.
+    This continues until the greatest value in the unsorted portion of
+    <code>array</code> is moved all the way to <code>lastIndex</code>
+    (the last index in the unsorted portion of <code>array</code>), after
+    which <code>lastIndex--</code> occurs.
+    <em>This entire process is repeated till <code>array</code>
+    is fully sorted</em>.
   `,
 
   complexity: {

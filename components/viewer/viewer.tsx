@@ -254,9 +254,10 @@ function Viewer(): JSX.Element {
 
         <section className={styles.info__explanation}>
           <div>
-            <strong>Explanation:</strong>
-            <br/>
-            <br/>
+            <strong>
+              { sorter?.values?.annotation?.length ? 'Explanation' : 'Summary'}
+              :
+            </strong>
             <p
               className={styles.info__explanation__body}
               dangerouslySetInnerHTML={{
