@@ -23,7 +23,7 @@ function Header(): JSX.Element {
     array,
   } = state;
 
-  const [showControlsMenu, setShowControlsMenu] = useState<boolean>(true);
+  const [showControlsMenu, setShowControlsMenu] = useState<boolean>(false);
 
   const algoNames = React.useMemo(() => Object.keys(algorithmNames), []);
 

@@ -2,7 +2,9 @@
 
 .footer-component {
   z-index: 10;
-  position: relative;
+  position: fixed;
+  bottom: 0;
+  left: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -52,6 +54,10 @@
 
     button {
       margin-right: 15px;
+
+      img {
+        min-width: 10px;
+      }
     }
   }
 

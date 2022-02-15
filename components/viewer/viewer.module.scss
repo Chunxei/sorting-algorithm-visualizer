@@ -6,7 +6,9 @@
 @function getDynamicBarColor($index) {
   $bar-color: variables.$green-medium;
 
-  @if ($index == 1) {
+  @if ($index == 0) {
+    $bar-color: variables.$yellow-light;
+  } @else if ($index == 1) {
     $bar-color: variables.$purple-dark;
   } @else if($index == 2) {
     $bar-color: variables.$purple-pink;
@@ -249,7 +251,7 @@
     }
   }
 
-  @for $bar-index from 1 through 3 {
+  @for $bar-index from 0 through 4 {
     @include getBarHighlightStyles($bar-index);
   }
 
@@ -321,13 +323,13 @@
         }
       }
 
-      &.highlight-0 {
+      &.highlight-default {
         .legend-tile {
           background: variables.$green-medium;
         }
       }
 
-      @for $bar-index from 1 through 3 {
+      @for $bar-index from 0 through 4 {
         @include getBarHighlightStyles($bar-index);
       }
     }
@@ -384,8 +386,8 @@
 
   .info {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    margin-bottom: 160px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    margin-bottom: 200px;
 
     &__legend {
       order: 1;

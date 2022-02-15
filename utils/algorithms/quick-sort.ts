@@ -4,6 +4,7 @@ import {
 } from './types';
 import {algorithmNames} from './index';
 import {ARRAY_SORT} from './array-sort';
+import {quickSortAnnotations as notes} from './annotations';
 
 /**
  * Creates a new SELECTION_SORT
@@ -19,6 +20,7 @@ export class QUICKSORT extends ARRAY_SORT {
   constructor(array: ArrayEntry[]) {
     super(array);
     this._sortIntoStages();
+    this._updateStageArray([-1, -1, -1, -1], notes[9]);
   }
 
   /**
@@ -33,23 +35,44 @@ export class QUICKSORT extends ARRAY_SORT {
     const pivot = this._array[highIndex];
 
     let partitionIndex = lowIndex;
-    let i;
+    let scanIndex;
 
-    for (i = lowIndex; i < highIndex; i++) {
-      this._updateStageArray([i, partitionIndex, highIndex]);
+    for (scanIndex = lowIndex; scanIndex < highIndex; scanIndex++) {
+      this._updateStageArray(
+          [lowIndex, scanIndex, partitionIndex, highIndex],
+          notes[2],
+      );
 
-      if (this._array[i].value < pivot.value) {
-        this._swap(i, partitionIndex);
-        this._updateStageArray([i, partitionIndex, highIndex]);
+      if (this._array[scanIndex].value < pivot.value) {
+        this._swap(scanIndex, partitionIndex);
+
+        this._updateStageArray(
+            [lowIndex, scanIndex, partitionIndex, highIndex],
+            notes[3],
+        );
+        if (scanIndex !== partitionIndex) {
+        }
+
+        this._updateStageArray(
+            [lowIndex, scanIndex, partitionIndex + 1, highIndex],
+            notes[4],
+        );
+
         partitionIndex++;
       }
     }
 
-    this._updateStageArray([i, partitionIndex, highIndex]);
+    this._updateStageArray(
+        [lowIndex, scanIndex, partitionIndex, highIndex],
+        notes[5],
+    );
 
     this._swap(partitionIndex, highIndex);
 
-    this._updateStageArray([highIndex, highIndex, partitionIndex]);
+    this._updateStageArray(
+        [lowIndex, highIndex, highIndex, partitionIndex],
+        notes[6],
+    );
 
     return partitionIndex;
   }
@@ -65,22 +88,56 @@ export class QUICKSORT extends ARRAY_SORT {
       lowIndex = 0,
       highIndex = this._array.length - 1,
   ): void {
-    if (lowIndex < highIndex) {
-      const partitionIndex = this._partition(lowIndex, highIndex);
-      this._sortIntoStages(lowIndex, partitionIndex - 1);
-      this._sortIntoStages(partitionIndex + 1, highIndex);
+    if (lowIndex === 0 && highIndex === this._array.length - 1) {
+      // initialize bars and explanation
+      this._updateStageArray([-1, -1, -1, -1], '');
+      this._updateStageArray([-1, -1, -1, -1], notes[0]);
     }
+
+    if (lowIndex < highIndex) {
+      this._updateStageArray(
+          [lowIndex, lowIndex, lowIndex, highIndex],
+          notes[1],
+      );
+      const partitionIndex = this._partition(lowIndex, highIndex);
+      const highIndex2 = partitionIndex - 1;
+      const lowIndex2 = partitionIndex + 1;
+
+      this._updateStageArray(
+          [lowIndex, lowIndex, lowIndex, highIndex2],
+          notes[7],
+      );
+      this._sortIntoStages(lowIndex, highIndex2);
+
+      this._updateStageArray(
+          [lowIndex2, lowIndex2, lowIndex2, highIndex],
+          notes[8],
+      );
+      this._sortIntoStages(lowIndex2, highIndex);
+    }
+
+    /* final stage array entry is set in the constructor, after calling
+     * this._sortIntoStages()
+    */
   }
 }
 
 export const quickSortInfo: AlgorithmInfo = {
-  description: `Quicksort compares the value at the left index
-    against the value at the right index in each step. If the value
-    at the left index is greater than the value at the right index,
-    the values at both indexes are SWAPPED, and the indexes are
-    incremented. This is repeated until the greatest value in the
-    array is moved to the end of the unsorted portion of the array,
-    which is marked by the last index, and then the process is repeated.`,
+  description: `Quicksort is an in-place sorting algorithm
+  in which <code>array</code> is recursively split at <code>pivotIndex</code>
+  into two <code>subarray</code>s, and the resulting <code>subarray</code>s
+  are recursively split as well, etc. The next index
+  of <code>pivotIndex</code> in the next recursion
+  is determined by iteratively moving all the current recursion's
+  <code>subarray</code> elements which are lower than
+  <code>array[pivotIndex]</code> to the left side of <code>subarray</code>,
+  updating <code>partitionIndex</code> to match the index (plus 1) of the
+  rightmost member of the moved elements.
+  After each iteration is complete, <code>pivotIndex = partitionIndex</code>
+  occurs.
+  <em>This entire process is repeated till <code>array</code>
+  is fully sorted</em>.
+`,
 
   complexity: {
     time: 'O(n<sup>2</sup>)',

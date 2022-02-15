@@ -11,42 +11,56 @@ abstract class ABSTRACT_SORT {
    * */
   protected constructor() {}
 
-  /* name of the algorithm class */
+  /** The name of the algorithm class */
   abstract name: AlgorithmName
 
-  /* the array to sort in place */
+  /**  the array to sort in place */
   protected abstract _array: ArrayEntry[]
   protected abstract _stageArray: ArraySorterReturnValues[]
   protected abstract _stageIndex: number
 
+  /**
+  * Adds a new stage to the stage array, with indexes for bar highlighting
+  * and optionally an annotation explaining the step taken at that stage
+  */
   protected abstract _updateStageArray(
     indexes: number[],
     annotation?: string
   ): void
 
+
+  /** Swaps the values at the specified indexes. */
   protected abstract _swap(index1: number, index2: number): void
 
+  /**
+   * Sorting algorithm function.
+   * Populates the stage array with the new state of the array at each step.
+   * */
   protected abstract _sortIntoStages(...args: any[]): void
 
-  /** sort the array up to a specified stage, and return the result */
-  abstract sortAt(position: number): ArraySorterReturnValues
+  /**
+  * Sort the array up to a specified stage index, and return the result.
+  */
+  abstract sortAt(stageIndex: number): ArraySorterReturnValues
 
-  /** perform one step forward in the sorting process */
+  /** Perform one step forward in the sorting process */
   abstract sortOnce(): ArraySorterReturnValues
 
-  /** perform one step backward in the sorting process */
+  /** Perform one step backward in the sorting process */
   abstract unsortOnce(): ArraySorterReturnValues
 
-  /** get summary of relevant values in the sorting class */
+  /** Get summary of relevant values in the sorting class
+   * at the current stage index
+   * */
   abstract get values(): ArraySorterReturnValues
 
-  /** set summary of relevant indexes in the sorting class */
+  /** Update relevant indexes in the sorting class */
   abstract set indexes(array: number[]);
 
-  /** get summary of relevant indexes in the sorting class */
+  /** Get relevant indexes in the sorting class */
   abstract get indexes(): number[];
 
-  /** whether the sorting process is complete */
+  /** Check whether the sorting process is complete */
   abstract get done(): boolean;
 }
 
@@ -75,10 +89,12 @@ export class ARRAY_SORT extends ABSTRACT_SORT {
   }
 
   /**
-   * Adds a new entry to the stage array
+   * Adds a new stage to the stage array, optionally with the explanation
+   * for that stage
    *
    * @param {number[]} indexes - the indexes to update
-   * @param {string} annotation - a description for this saved state
+   * @param {string} [annotation] - the explanation for this stage in the
+   * sorting process
    * */
   protected _updateStageArray(indexes: number[], annotation?: string): void {
     this._stageArray.push({
@@ -89,6 +105,8 @@ export class ARRAY_SORT extends ABSTRACT_SORT {
   }
 
   /**
+   * Swaps the values at the specified indexes.
+   *
    * @param {number} index1 - first index to swap
    * @param {number} index2 - second index to swap
    * @return {void}
@@ -103,7 +121,7 @@ export class ARRAY_SORT extends ABSTRACT_SORT {
 
   /**
    * Sorting algorithm function.
-   * Populates this._stageArray with the array at each step.
+   * Populates this._stageArray with the new state of the array at each step.
    *
    * __NOTE: THIS IS A STUB. IMPLEMENT SUBCLASS-SPECIFIC LOGIC IN SUBCLASS__
    *
@@ -113,8 +131,9 @@ export class ARRAY_SORT extends ABSTRACT_SORT {
   protected _sortIntoStages(...args: any[]): void {};
 
   /**
-   * Update _stageIndex with the specified index and return
-   * the state of _stageArray at that index.
+   * Update this._stageIndex with the specified index and return
+   * the state of this._stageArray at that index. Used to jump
+   * to a specified stage.
    *
    * @param {number} stageIndex - index of the array state to return
    * @return {ArraySorterReturnValues}
@@ -130,6 +149,7 @@ export class ARRAY_SORT extends ABSTRACT_SORT {
 
   /**
    * Steps forward once and returns the result.
+   * Used to advance the visualization by one step.
    *
    * @return {ArraySorterReturnValues}
    * */
@@ -142,6 +162,7 @@ export class ARRAY_SORT extends ABSTRACT_SORT {
 
   /**
    * Steps backwards once and returns the result.
+   * Used to reverse the visualization by one step.
    *
    * @return {ArraySorterReturnValues}
    * */
@@ -152,7 +173,9 @@ export class ARRAY_SORT extends ABSTRACT_SORT {
   }
 
   /**
-   * get the relevant values used for sorting
+   * Get the relevant values used for sorting.
+   * These values may vary depending on the sorting algorithm used.
+   *
    * @return {ArraySorterReturnValues}
    * */
   get values(): ArraySorterReturnValues {
@@ -160,7 +183,9 @@ export class ARRAY_SORT extends ABSTRACT_SORT {
   }
 
   /**
-   * sets new values for the current stage array indexes.
+   * Sets new values for the current sorting algorithm's indexes.
+   * These values may vary depending on the sorting algorithm used.
+   *
    * @param {[number, number, number]} values - values for the update.
    * */
   set indexes(values: number[]) {
@@ -168,14 +193,14 @@ export class ARRAY_SORT extends ABSTRACT_SORT {
   }
 
   /**
-   * gets new values for the current stage array indexes.
+   * Gets the value at the current stage index.
    * */
   get indexes(): number[] {
     return (this._stageArray?.[this._stageIndex]?.indexes || [0, 1, 2]);
   }
 
   /**
-   * set a new array
+   * Directly update the stage index
    * @param {number} index - the new value of _stageIndex
    * */
   set stageIndex(index: number) {
@@ -183,7 +208,7 @@ export class ARRAY_SORT extends ABSTRACT_SORT {
   }
 
   /**
-   * get the _stageIndex's current state
+   * Get the current stage index
    * @return {number}
    * */
   get stageIndex(): number {
@@ -191,7 +216,7 @@ export class ARRAY_SORT extends ABSTRACT_SORT {
   }
 
   /**
-   * get the number of stages in _stageArray
+   * Get the number of stages in _stageArray
    * @return {number}
    * */
   get stages(): number {
@@ -199,7 +224,7 @@ export class ARRAY_SORT extends ABSTRACT_SORT {
   }
 
   /**
-   * check whether the array has been fully sorted
+   * cCheck whether the array has been fully sorted
    * @return {boolean}
    * */
   get done(): boolean {

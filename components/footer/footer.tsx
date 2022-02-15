@@ -88,10 +88,17 @@ function Footer(): JSX.Element {
   const handleControlAction = (control: PlaybackControls): void => {
     if (control.icons.length > 1) {
       if (playbackPosition === playbackLength) {
+        /* control.action === resetVisualization */
         quickToggleControl(control.action);
+
+        setTimeout(() => {
+          playOrPauseVisualization();
+        }, 100);
       } else {
         playOrPauseVisualization();
       }
+
+      playOrPauseVisualization();
     } else {
       quickToggleControl(control.action);
     }

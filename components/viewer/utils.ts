@@ -18,7 +18,7 @@ export const getVisualizerBarClasses = (
   /* express initialization */
   let [
     leftIndex, rightIndex, lastIndex, startIndex, currentMinIndex,
-    scanIndex, partitionIndex, pivotIndex,
+    lowIndex, scanIndex, partitionIndex, pivotIndex,
   ] = [] as number[];
 
   let classes: Record<string, boolean> = {
@@ -65,10 +65,11 @@ export const getVisualizerBarClasses = (
 
     case algorithmNames.QUICKSORT:
       sort = sorter as QUICKSORT;
-      [scanIndex, partitionIndex, pivotIndex] = sort.indexes;
+      [lowIndex, scanIndex, partitionIndex, pivotIndex] = sort.indexes;
 
       classes = {
         ...classes,
+        [styles['highlight-0']]: index === lowIndex,
         [styles['highlight-1']]: index === scanIndex,
         [styles['highlight-2']]: index === partitionIndex,
         [styles['highlight-3']]: index === pivotIndex,
@@ -87,7 +88,7 @@ export const getVisualizerLegends = (
     algorithmName: AlgorithmName,
 ) : Record<string, string> => {
   let legends: Record<string, string> = {
-    [styles['highlight-0']]: 'Unsorted indexes',
+    [styles['highlight-default']]: 'Unsorted indexes',
     [styles.sorted]: 'Sorted indexes',
     // [styles.done]: 'Done',
   };
@@ -121,9 +122,10 @@ export const getVisualizerLegends = (
 
     case algorithmNames.QUICKSORT:
       legends = {
+        [styles['highlight-0']]: 'Low index',
         [styles['highlight-1']]: 'Scan index',
         [styles['highlight-2']]: 'Partition index',
-        [styles['highlight-3']]: 'Pivot index',
+        [styles['highlight-3']]: 'Pivot index / High index',
         ...legends,
       };
       break;
