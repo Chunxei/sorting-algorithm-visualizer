@@ -412,8 +412,10 @@
       order: 1;
       min-height: 150px;
     }
+
     &__explanation {
       order: 0;
+      height: max-content;
       min-height: 150px;
 
       & > div {
