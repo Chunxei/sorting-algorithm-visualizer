@@ -125,7 +125,7 @@ export const getVisualizerLegends = (
         [styles['highlight-0']]: 'Low index',
         [styles['highlight-1']]: 'Scan index',
         [styles['highlight-2']]: 'Partition index',
-        [styles['highlight-3']]: 'Pivot index / High index',
+        [styles['highlight-3']]: 'Pivot index, High index',
         ...legends,
       };
       break;

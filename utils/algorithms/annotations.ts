@@ -168,7 +168,7 @@ export const quickSortAnnotations: string[] = [
   /* 8 */`
   <strong>Initialize</strong> <code>subarray</code> border indexes.
   <br />
-  <code>lowIndex = partitionIndex - 1 (from a previous recursion)</code>
+  <code>lowIndex = partitionIndex + 1 (from a previous recursion)</code>
   <br />
   <code>highIndex = highIndex (from a previous recursion)</code>
   `,
