@@ -57,7 +57,16 @@ function Header(): JSX.Element {
 
   return (
     <header className={styles.headerComponent}>
-      <h1>Alviz</h1>
+      <div className={styles.brand}>
+        <Image
+          src="/icons/alviz-logo.svg"
+          alt="..."
+          width={25}
+          height={25}
+        />
+
+        <h1>Alviz</h1>
+      </div>
 
       <button
         className={cn(styles.menuButton, {

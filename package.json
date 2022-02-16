@@ -1,6 +1,12 @@
 {
   "name": "sorting-algorithm-visualizer",
+  "version": "1.0.0",
   "private": true,
+  "homepage": "https://github.com/Chunxei/sorting-algorithm-visualizer#readme",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/Chunxei/sorting-algorithm-visualizer.git"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",

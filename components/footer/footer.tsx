@@ -137,7 +137,7 @@ function Footer(): JSX.Element {
           [styles.active]: showPlaybackMenu,
         })}
         onClick={handleMenuButtonClick}
-        aria-label="toggle control menu"
+        aria-label="toggle playback controls menu"
       >
         <span>
           <Image
@@ -153,9 +153,12 @@ function Footer(): JSX.Element {
         </span>
       </button>
 
-      <section className={cn(styles.playbackControls, {
-        [styles.active]: showPlaybackMenu,
-      })}>
+      <section
+        className={cn(styles.playbackControls, {
+          [styles.active]: showPlaybackMenu,
+        })}
+        aria-label="playback controls menu"
+      >
         <div className={cn(styles.playbackControls__buttons)}>
           {playbackControls.map((control) => (
             <button
