@@ -40,22 +40,29 @@ export class QUICKSORT extends ARRAY_SORT {
     for (scanIndex = lowIndex; scanIndex < highIndex; scanIndex++) {
       this._updateStageArray(
           [lowIndex, scanIndex, partitionIndex, highIndex],
-          notes[2],
+          /* add more info to the note if scanIndex++ happened in this step */
+          (scanIndex === lowIndex ?
+            '' : 'Advance <code>scanIndex</code>.<br/>') + notes[2],
       );
 
       if (this._array[scanIndex].value < pivot.value) {
-        this._swap(scanIndex, partitionIndex);
+        let note4Prefix = '';
 
-        this._updateStageArray(
-            [lowIndex, scanIndex, partitionIndex, highIndex],
-            notes[3],
-        );
         if (scanIndex !== partitionIndex) {
+          this._swap(scanIndex, partitionIndex);
+          this._updateStageArray(
+              [lowIndex, scanIndex, partitionIndex, highIndex],
+              notes[3],
+          );
+        } else {
+          note4Prefix = `
+          Since <code>array[scanIndex] < array[pivotIndex] === true</code>,
+          `;
         }
 
         this._updateStageArray(
             [lowIndex, scanIndex, partitionIndex + 1, highIndex],
-            notes[4],
+            note4Prefix + notes[4],
         );
 
         partitionIndex++;

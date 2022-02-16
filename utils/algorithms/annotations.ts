@@ -129,19 +129,19 @@ export const quickSortAnnotations: string[] = [
   `,
 
   /* 2 */`
-  Advance <code>scanIndex</code>.
   Check if <code>array[scanIndex] < array[pivotIndex]</code>.
   `,
 
   /* 3 */`
   <code>array[scanIndex] < array[pivotIndex] === true</code>,
+  and <code>scanIndex !== partitionIndex</code>,
   therefore <code>array[scanIndex]</code> and
   <code>array[partitionIndex]</code> are <strong>swapped</strong>.
   `,
 
   /* 4 */`
-  <code>partitionIndex++</code> occurs, marking the boundary between
-  <code>subarray</code> elements (those visited by
+  <code>partitionIndex++</code> occurs, marking the new boundary between
+  <code>subarray</code> elements (that have been visited by
   <code>scanIndex</code>) which are less than <code>array[pivotIndex]</code>,
   and those which are greater (as well as unvisited elements).
   `,
