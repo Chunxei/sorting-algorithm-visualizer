@@ -57,14 +57,24 @@ function Header(): JSX.Element {
 
   return (
     <header className={styles.headerComponent}>
-      <h1>Alviz</h1>
+      <div className={styles.brand}>
+        <Image
+          src="/icons/alviz-logo.svg"
+          alt="..."
+          width={25}
+          height={25}
+        />
+
+        <h1>Alviz</h1>
+      </div>
 
       <button
         className={cn(styles.menuButton, {
           [styles.active]: showControlsMenu,
         })}
         onClick={handleMenuButtonClick}
-        aria-label="toggle control menu"
+        aria-label="toggle configuration menu"
+        title="Toggle configuration"
       >
         <span>
           <Image
@@ -89,7 +99,8 @@ function Header(): JSX.Element {
         <ul>
           <li>
             <label htmlFor="algorithmName">
-              Algorithm: {' '}
+              Algorithm:
+
               <select
                 name="algorithmName"
                 id="algorithmName"
@@ -132,7 +143,6 @@ function Header(): JSX.Element {
           <li>
             <label htmlFor="arraySize">
               Array Size:
-              {' '}
 
               <input
                 type="range"

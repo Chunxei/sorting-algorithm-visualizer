@@ -190,10 +190,10 @@ function Viewer(): JSX.Element {
   return (
     <article className={styles.viewerComponent}>
       <section className={styles.titleBar}>
-        <h1 className={styles.titleBar__title}>
+        <h2 className={styles.titleBar__title}>
           {sorter?.name?.toLowerCase()?.replace(/_/g, ' ')}
           :
-        </h1>
+        </h2>
 
         <div className={styles.titleBar__tags}>
           { Object.entries(algorithmInfo.complexity).map(([key, value])=>(
