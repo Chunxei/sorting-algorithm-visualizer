@@ -18,12 +18,12 @@ interface PlaybackControls {
 const playbackControls: PlaybackControls[] = [
   {
     icons: ['/icons/icon-previous.svg'],
-    label: 'go to start',
+    label: 'Go to start',
     action: 'resetVisualization',
   },
   {
     icons: ['/icons/icon-rewind.svg'],
-    label: 'previous',
+    label: 'Previous step',
     action: 'stepVisualizationBackward',
   },
   {
@@ -32,18 +32,18 @@ const playbackControls: PlaybackControls[] = [
       '/icons/icon-pause.svg',
       '/icons/icon-restart.svg',
     ],
-    label: 'play/pause/restart',
+    label: 'Play/Pause/Restart',
     /* 👇🏾 used when playback position === playback length */
     action: 'resetVisualization',
   },
   {
     icons: ['/icons/icon-fast-forward.svg'],
-    label: 'next',
+    label: 'Next step',
     action: 'stepVisualizationForward',
   },
   {
     icons: ['/icons/icon-next.svg'],
-    label: 'go to end',
+    label: 'Go to end',
     action: 'playWithoutVisualization',
   },
 ];
@@ -162,6 +162,7 @@ function Footer(): JSX.Element {
               key={control.label}
               onClick={() => handleControlAction(control)}
               aria-label={control.label}
+              title={control.label}
             >
               <Image
                 src={selectControlIcon(control)}
