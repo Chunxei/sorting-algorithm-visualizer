@@ -37,7 +37,7 @@ export const controlsReducer = (
     state = controlsState,
     action: ControlsAction,
 ): ControlsState => {
-  console.log('[ACTION DATA]:', action?.data);
+  // console.log('[ACTION DATA]:', action?.data);
 
   switch (action.type) {
     case SET_ARRAY:
