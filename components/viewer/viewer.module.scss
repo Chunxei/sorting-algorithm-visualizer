@@ -135,6 +135,8 @@
   width: 100%;
   min-width: 300px;
   height: 70%;
+  max-height: 450px;
+  min-height: 300px;
   border: 1px solid variables.$green-medium;
   border-radius: 5px;
   padding: 20px 20px 0 20px;
@@ -385,6 +387,10 @@
 }
 
 @media only screen and (max-width: 800px) {
+  .visualizer {
+    max-height: 300px;
+  }
+
   .visualizer-bar {
     &__label {
       opacity: 0;
@@ -395,13 +401,18 @@
   .info {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    min-height: 250px;
     margin-bottom: 200px;
 
     &__legend {
       order: 1;
+      min-height: 150px;
     }
+
     &__explanation {
       order: 0;
+      height: max-content;
+      min-height: 150px;
 
       & > div {
         &:nth-of-type(2) {
