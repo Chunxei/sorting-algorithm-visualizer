@@ -14,7 +14,7 @@ export const bubbleSortAnnotations: string[] = [
   `,
 
   /* 2 */`
-  <code>array[leftIndex] > array[rightIndex] === true</code>,
+  <code>array[leftIndex] > array[rightIndex]</code>,
   therefore <code>array[leftIndex]</code> and
   <code>array[rightIndex]</code> are <strong>swapped</strong>.
   `,
@@ -51,7 +51,7 @@ export const selectionSortAnnotations: string[] = [
   `,
 
   /* 2 */`
-  <code>array[scanIndex] < array[minIndex] === true</code>,
+  <code>array[scanIndex] < array[minIndex]</code>,
   therefore <strong>set</strong> <code>minIndex = scanIndex</code>.
   `,
 
@@ -90,7 +90,7 @@ export const insertionSortAnnotations: string[] = [
   `,
 
   /* 2 */`
-  <code>array[scanIndex] < array[scanIndex - 1] === true</code>,
+  <code>array[scanIndex] < array[scanIndex - 1]</code>,
   therefore <code>array[scanIndex]</code> and
   <code>array[scanIndex - 1]</code> are <strong>swapped</strong>.
   `,
@@ -133,7 +133,7 @@ export const quickSortAnnotations: string[] = [
   `,
 
   /* 3 */`
-  <code>array[scanIndex] < array[pivotIndex] === true</code>,
+  <code>array[scanIndex] < array[pivotIndex]</code>,
   and <code>scanIndex !== partitionIndex</code>,
   therefore <code>array[scanIndex]</code> and
   <code>array[partitionIndex]</code> are <strong>swapped</strong>.

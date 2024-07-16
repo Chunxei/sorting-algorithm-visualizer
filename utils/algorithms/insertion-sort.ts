@@ -65,12 +65,12 @@ export const insertionSortInfo: AlgorithmInfo = {
     <code>scanIndex = startIndex + 1</code> are
     <strong>simultaneously iterated</strong>
     over <code>array</code>. If
-    <code>array[scanIndex] < array[scanIndex - 1] === true</code>
+    <code>array[scanIndex] < array[scanIndex - 1]</code>
     at any point during this,
     then <code>array[scanIndex]</code> and <code>array[scanIndex - 1]</code>
     are <strong>swapped</strong>, and <code>scanIndex--</code> occurs.
     This step is repeated for as long as
-    <code>array[scanIndex] < array[scanIndex - 1] === true</code>. Otherwise,
+    <code>array[scanIndex] < array[scanIndex - 1]</code>. Otherwise,
     <code>scanIndex</code> is reset to <code>scanIndex = startIndex + 1</code>.
     <em>This entire process is repeated till <code>array</code>
     is fully sorted</em>.

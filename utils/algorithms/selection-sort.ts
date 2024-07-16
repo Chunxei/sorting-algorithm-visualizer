@@ -88,7 +88,7 @@ export const selectionSortInfo: AlgorithmInfo = {
     <code>minIndex = startIndex</code>,
     <code>scanIndex = startIndex + 1</code>. <code>scanIndex</code>
     is then iterated over <code>array</code>, and if at any point
-    <code>array[scanIndex] < array[minIndex] === true</code>,
+    <code>array[scanIndex] < array[minIndex]</code>,
     then <code>minIndex = scanIndex</code>.
     When <code>scanIndex</code> reaches the end of <code>array</code>,
     <code>array[minIndex]</code> and <code>array[startIndex]</code> are

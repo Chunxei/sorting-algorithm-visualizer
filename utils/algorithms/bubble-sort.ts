@@ -66,7 +66,7 @@ export const bubbleSortInfo: AlgorithmInfo = {
     <code>rightIndex = leftIndex + 1</code> are
     <strong>simultaneously iterated</strong>
     over <code>array</code>. If
-    <code>array[leftIndex] > array[rightIndex] === true</code>
+    <code>array[leftIndex] > array[rightIndex]</code>
     at any point during this,
     then <code>array[leftIndex]</code> and <code>array[leftIndex]</code>
     are <strong>swapped</strong>.

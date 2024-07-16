@@ -56,7 +56,7 @@ export class QUICKSORT extends ARRAY_SORT {
           );
         } else {
           note4Prefix = `
-          Since <code>array[scanIndex] < array[pivotIndex] === true</code>,
+          Since <code>array[scanIndex] < array[pivotIndex]</code>,
           `;
         }
 
